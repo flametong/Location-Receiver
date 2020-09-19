@@ -8,7 +8,5 @@ class OverviewPolyline {
     @SerializedName(Constants.POINTS)
     private val points: String? = null
 
-    fun getPoints(): String? {
-        return points
-    }
+    fun getPoints(): String? = points
 }

@@ -13,12 +13,11 @@ class RoomModule {
 
     @Provides
     @Singleton
-    fun provideAppDatabase(): AppDatabase {
-        return Room.databaseBuilder(
+    fun provideAppDatabase(): AppDatabase =
+        Room.databaseBuilder(
             App.context,
             AppDatabase::class.java,
             Constants.DATABASE_NAME
-        )
-            .build()
-    }
+        ).build()
+
 }

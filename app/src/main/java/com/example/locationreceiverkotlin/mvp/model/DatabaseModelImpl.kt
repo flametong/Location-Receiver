@@ -40,7 +40,6 @@ class DatabaseModelImpl : DatabaseModel {
         Log.d(TAG, "Clear completed")
     }
 
-    override suspend fun getLocationList(): List<UserLocation> {
-        return mDatabase.userLocationDao().getSortedListByTimeInMillis()
-    }
+    override suspend fun getLocationList(): List<UserLocation> =
+        mDatabase.userLocationDao().getSortedListByTimeInMillis()
 }

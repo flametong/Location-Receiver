@@ -8,7 +8,5 @@ class RoutesItem {
     @SerializedName(Constants.OVERVIEW_POLYLINE)
     private var overviewPolyline: OverviewPolyline? = null
 
-    fun getOverviewPolyline(): OverviewPolyline? {
-        return overviewPolyline
-    }
+    fun getOverviewPolyline(): OverviewPolyline? = overviewPolyline
 }

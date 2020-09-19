@@ -8,7 +8,5 @@ class DirectionsResponses {
     @SerializedName(Constants.ROUTES)
     private var routes: List<RoutesItem>? = null
 
-    fun getRoutes(): List<RoutesItem?>? {
-        return routes
-    }
+    fun getRoutes(): List<RoutesItem?>? = routes
 }

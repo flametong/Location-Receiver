@@ -14,11 +14,10 @@ class RetrofitModule {
 
     @Provides
     @Singleton
-    fun provideDirectionsApi(): DirectionsApi {
-        return Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(App.context.getString(R.string.base_url))
-            .build()
-            .create(DirectionsApi::class.java)
-    }
+    fun provideDirectionsApi(): DirectionsApi = Retrofit.Builder()
+        .addConverterFactory(GsonConverterFactory.create())
+        .baseUrl(App.context.getString(R.string.base_url))
+        .build()
+        .create(DirectionsApi::class.java)
+
 }

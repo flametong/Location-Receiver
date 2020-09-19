@@ -30,9 +30,7 @@ class MenuActivity : MvpAppCompatActivity(), MenuView {
     lateinit var mPresenter: MenuPresenter
 
     @ProvidePresenter
-    fun provideMenuPresenter(): MenuPresenter {
-        return MenuPresenter(mAuth)
-    }
+    fun provideMenuPresenter(): MenuPresenter = MenuPresenter(mAuth)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         App.appComponent.inject(this)
