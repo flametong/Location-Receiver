@@ -7,10 +7,10 @@ import com.example.locationreceiverkotlin.room.UserLocation
 import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
 
-class DatabaseModelImpl : DatabaseModel {
+class RoomModel {
 
     companion object {
-        private val TAG = DatabaseModelImpl::class.java.simpleName
+        private val TAG = RoomModel::class.java.simpleName
     }
 
     @Inject
@@ -23,7 +23,7 @@ class DatabaseModelImpl : DatabaseModel {
         App.appComponent.inject(this)
     }
 
-    override suspend fun insertToDatabase(latitude: Double, longitude: Double, timeInMillis: Long) {
+    suspend fun insertToDatabase(latitude: Double, longitude: Double, timeInMillis: Long) {
         val userLocation = UserLocation(
             mAuth.currentUser?.email,
             latitude,
@@ -35,11 +35,11 @@ class DatabaseModelImpl : DatabaseModel {
         Log.d(TAG, "Insert completed")
     }
 
-    override suspend fun clearDatabase() {
+    suspend fun clearDatabase() {
         mDatabase.clearAllTables()
         Log.d(TAG, "Clear completed")
     }
 
-    override suspend fun getLocationList(): List<UserLocation> =
+    suspend fun getLocationList(): List<UserLocation> =
         mDatabase.userLocationDao().getSortedListByTimeInMillis()
 }

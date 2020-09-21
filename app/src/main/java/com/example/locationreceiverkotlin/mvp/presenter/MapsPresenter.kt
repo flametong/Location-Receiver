@@ -4,7 +4,7 @@ import android.os.Message
 import android.util.Log
 import com.example.locationreceiverkotlin.App
 import com.example.locationreceiverkotlin.interfaces.RetrofitResponseListener
-import com.example.locationreceiverkotlin.mvp.model.DatabaseModelImpl
+import com.example.locationreceiverkotlin.mvp.model.RoomModel
 import com.example.locationreceiverkotlin.mvp.model.RetrofitModel
 import com.example.locationreceiverkotlin.mvp.view.MapsView
 import com.example.locationreceiverkotlin.retrofit.DirectionsApi
@@ -34,7 +34,7 @@ class MapsPresenter : MvpPresenter<MapsView>(), RetrofitResponseListener {
     }
 
     private val places = arrayListOf<LatLng>()
-    private var mDatabaseModel = DatabaseModelImpl()
+    private var mRoomModel = RoomModel()
     private var mRetrofitModel = RetrofitModel(this)
 
     @Inject
@@ -56,9 +56,10 @@ class MapsPresenter : MvpPresenter<MapsView>(), RetrofitResponseListener {
     fun updateMap() {
         viewState.clearMap()
         GlobalScope.launch {
-            mDatabaseModel.clearDatabase()
+            mRoomModel.clearDatabase()
         }
         places.clear()
+
         mFirebaseFirestore.collection(Constants.LOCATIONS)
             .addSnapshotListener { value, error ->
                 if (error != null) {
@@ -112,7 +113,7 @@ class MapsPresenter : MvpPresenter<MapsView>(), RetrofitResponseListener {
                                 }
                                 // Insert location to db
                                 GlobalScope.launch {
-                                    mDatabaseModel.insertToDatabase(
+                                    mRoomModel.insertToDatabase(
                                         latitude,
                                         longitude,
                                         timeInMillis
@@ -144,7 +145,7 @@ class MapsPresenter : MvpPresenter<MapsView>(), RetrofitResponseListener {
         val channel = Channel<List<UserLocation>>()
 
         GlobalScope.launch {
-            channel.send(mDatabaseModel.getLocationList())
+            channel.send(mRoomModel.getLocationList())
         }
 
         GlobalScope.launch(Dispatchers.Main) {

@@ -6,7 +6,7 @@ import com.example.locationreceiverkotlin.activity.SplashScreen
 import com.example.locationreceiverkotlin.dagger.module.FirebaseModule
 import com.example.locationreceiverkotlin.dagger.module.RetrofitModule
 import com.example.locationreceiverkotlin.dagger.module.RoomModule
-import com.example.locationreceiverkotlin.mvp.model.DatabaseModelImpl
+import com.example.locationreceiverkotlin.mvp.model.RoomModel
 import com.example.locationreceiverkotlin.mvp.model.RetrofitModel
 import com.example.locationreceiverkotlin.mvp.presenter.MapsPresenter
 import dagger.Component
@@ -24,6 +24,6 @@ interface AppComponent {
     fun inject(menuActivity: MenuActivity)
     fun inject(splashScreen: SplashScreen)
     fun inject(mapsPresenter: MapsPresenter)
-    fun inject(databaseModelImpl: DatabaseModelImpl)
+    fun inject(roomModel: RoomModel)
     fun inject(retrofitModel: RetrofitModel)
 }
