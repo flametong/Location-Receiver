@@ -55,9 +55,6 @@ class MapsPresenter : MvpPresenter<MapsView>(), RetrofitResponseListener {
 
     fun updateMap() {
         viewState.clearMap()
-        GlobalScope.launch {
-            mRoomModel.clearDatabase()
-        }
         places.clear()
 
         mFirebaseFirestore.collection(Constants.LOCATIONS)

@@ -35,11 +35,6 @@ class RoomModel {
         Log.d(TAG, "Insert completed")
     }
 
-    suspend fun clearDatabase() {
-        mDatabase.clearAllTables()
-        Log.d(TAG, "Clear completed")
-    }
-
     suspend fun getLocationList(): List<UserLocation> =
         mDatabase.userLocationDao().getSortedListByTimeInMillis()
 }
