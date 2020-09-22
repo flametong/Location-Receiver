@@ -1,9 +1,9 @@
 package com.example.locationreceiverkotlin.mvp.model
 
-import android.util.Log
 import com.example.locationreceiverkotlin.App
 import com.example.locationreceiverkotlin.room.AppDatabase
 import com.example.locationreceiverkotlin.room.UserLocation
+import com.example.locationreceiverkotlin.util.LoggerImpl
 import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
 
@@ -12,6 +12,8 @@ class RoomModel {
     companion object {
         private val TAG = RoomModel::class.java.simpleName
     }
+
+    private val logger = LoggerImpl()
 
     @Inject
     lateinit var mDatabase: AppDatabase
@@ -32,7 +34,7 @@ class RoomModel {
         )
 
         mDatabase.userLocationDao().insert(userLocation)
-        Log.d(TAG, "Insert completed")
+        logger.logd(TAG, "Insert completed")
     }
 
     suspend fun getLocationList(): List<UserLocation> =

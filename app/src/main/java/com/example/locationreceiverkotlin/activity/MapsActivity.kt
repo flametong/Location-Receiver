@@ -1,6 +1,8 @@
 package com.example.locationreceiverkotlin.activity
 
+import android.graphics.Color
 import android.os.Bundle
+import android.widget.Toast
 import com.example.locationreceiverkotlin.R
 import com.example.locationreceiverkotlin.databinding.ActivityMapsBinding
 import com.example.locationreceiverkotlin.dialog.CalendarDialog
@@ -14,6 +16,7 @@ import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
+import com.google.maps.android.PolyUtil
 import moxy.MvpAppCompatActivity
 import moxy.presenter.InjectPresenter
 
@@ -27,12 +30,15 @@ class MapsActivity : MvpAppCompatActivity(), OnMapReadyCallback, MapsView, Calen
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMapsBinding.inflate(layoutInflater)
-        setContentView(binding.root)
         Variables.isMapActive = true
+        binding = ActivityMapsBinding.inflate(layoutInflater)
 
-        binding.btnOpenCalendar.setOnClickListener {
-            CalendarDialog().show(supportFragmentManager, Constants.OPEN_DIALOG)
+        binding.apply {
+            setContentView(root)
+
+            btnOpenCalendar.setOnClickListener {
+                CalendarDialog().show(supportFragmentManager, Constants.OPEN_DIALOG)
+            }
         }
 
         val mapFragment = supportFragmentManager
@@ -70,7 +76,20 @@ class MapsActivity : MvpAppCompatActivity(), OnMapReadyCallback, MapsView, Calen
     }
 
     // Draw polyline
-    override fun drawLine(polylineOptions: PolylineOptions) {
-        mMap?.addPolyline(polylineOptions)
+    override fun drawLine(encodedPath: String?) {
+        val polyline = PolylineOptions()
+            .addAll(PolyUtil.decode(encodedPath))
+            .width(Constants.POLYLINE_WIDTH)
+            .color(Color.RED)
+
+        mMap?.addPolyline(polyline)
+    }
+
+    // Show if no internet
+    override fun showNoInternetConnection() {
+        Toast.makeText(
+            this, R.string.no_internet_connection,
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }

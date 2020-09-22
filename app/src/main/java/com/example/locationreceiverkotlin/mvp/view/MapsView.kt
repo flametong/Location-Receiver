@@ -12,5 +12,6 @@ interface MapsView : MvpView {
     fun clearMap()
     fun addMarkerToMap(marker: MarkerOptions)
     fun moveMapCamera(coordinates: LatLng)
-    fun drawLine(polylineOptions: PolylineOptions)
+    fun drawLine(encodedPath: String?)
+    fun showNoInternetConnection()
 }

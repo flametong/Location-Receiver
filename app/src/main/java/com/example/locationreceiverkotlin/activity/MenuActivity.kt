@@ -1,17 +1,13 @@
 package com.example.locationreceiverkotlin.activity
 
-import android.content.Context
 import android.content.Intent
-import android.location.LocationManager
 import android.os.Bundle
 import android.widget.Toast
 import com.example.locationreceiverkotlin.App
 import com.example.locationreceiverkotlin.R
 import com.example.locationreceiverkotlin.databinding.ActivityMenuBinding
-import com.example.locationreceiverkotlin.dialog.LocationRequestDialog
 import com.example.locationreceiverkotlin.mvp.presenter.MenuPresenter
 import com.example.locationreceiverkotlin.mvp.view.MenuView
-import com.example.locationreceiverkotlin.util.Constants
 import com.example.locationreceiverkotlin.util.Variables
 import com.google.firebase.auth.FirebaseAuth
 import moxy.MvpAppCompatActivity
@@ -38,30 +34,17 @@ class MenuActivity : MvpAppCompatActivity(), MenuView {
         Variables.isMapActive = false
 
         binding = ActivityMenuBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        binding.btnShowCurrentLocation.setOnClickListener {
-            mPresenter.showMap()
-        }
+        binding.apply {
+            setContentView(root)
 
-        binding.btnSignOut.setOnClickListener {
-            mPresenter.signOut()
-        }
-    }
+            btnShowCurrentLocation.setOnClickListener {
+                mPresenter.showMap()
+            }
 
-    // Request if user doesn't provide the location
-    override fun onStart() {
-        super.onStart()
-        mPresenter.requestLocationDialog()
-    }
-
-    override fun showRequestLocationDialog() {
-        val locationManager =
-            getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-            || !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-        ) {
-            LocationRequestDialog().show(supportFragmentManager, Constants.DIALOG_TAG)
+            btnSignOut.setOnClickListener {
+                mPresenter.signOut()
+            }
         }
     }
 

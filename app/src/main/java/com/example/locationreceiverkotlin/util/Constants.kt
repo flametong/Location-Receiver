@@ -1,10 +1,6 @@
 package com.example.locationreceiverkotlin.util
 
-import android.Manifest
-
 object Constants {
-    const val ACCESS_FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION
-    const val DIALOG_TAG = "REQUEST_LOCATION_DIALOG"
     const val OPEN_DIALOG = "Open dialog"
     const val LOCATIONS = "locations"
     const val DATABASE_NAME = "UserLocation.db"

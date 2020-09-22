@@ -6,7 +6,6 @@ import moxy.viewstate.strategy.StateStrategyType
 
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface MenuView : MvpView {
-    fun showRequestLocationDialog()
     fun signOutUser()
     fun startMapsActivity()
 }

@@ -1,7 +1,9 @@
 package com.example.locationreceiverkotlin.interfaces
 
-import com.google.android.gms.maps.model.PolylineOptions
+import com.example.locationreceiverkotlin.retrofit.DirectionsResponses
+import retrofit2.Response
 
 interface RetrofitResponseListener {
-    fun putPolyline(polylineOptions: PolylineOptions)
+    fun putResponse(response: Response<DirectionsResponses?>?)
+    fun putError(t: Throwable)
 }

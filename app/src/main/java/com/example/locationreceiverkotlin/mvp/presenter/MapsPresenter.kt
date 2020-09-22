@@ -1,20 +1,20 @@
 package com.example.locationreceiverkotlin.mvp.presenter
 
-import android.os.Message
-import android.util.Log
 import com.example.locationreceiverkotlin.App
 import com.example.locationreceiverkotlin.interfaces.RetrofitResponseListener
 import com.example.locationreceiverkotlin.mvp.model.RoomModel
 import com.example.locationreceiverkotlin.mvp.model.RetrofitModel
 import com.example.locationreceiverkotlin.mvp.view.MapsView
 import com.example.locationreceiverkotlin.retrofit.DirectionsApi
+import com.example.locationreceiverkotlin.retrofit.DirectionsResponses
 import com.example.locationreceiverkotlin.room.AppDatabase
 import com.example.locationreceiverkotlin.room.UserLocation
 import com.example.locationreceiverkotlin.util.Constants
+import com.example.locationreceiverkotlin.util.LoggerImpl
 import com.example.locationreceiverkotlin.util.Util
+import com.example.locationreceiverkotlin.util.Variables
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.model.PolylineOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
@@ -24,6 +24,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import moxy.InjectViewState
 import moxy.MvpPresenter
+import retrofit2.Response
 import javax.inject.Inject
 
 @InjectViewState
@@ -33,6 +34,7 @@ class MapsPresenter : MvpPresenter<MapsView>(), RetrofitResponseListener {
         private val TAG = MapsPresenter::class.simpleName
     }
 
+    private val logger = LoggerImpl()
     private val places = arrayListOf<LatLng>()
     private var mRoomModel = RoomModel()
     private var mRetrofitModel = RetrofitModel(this)
@@ -54,13 +56,14 @@ class MapsPresenter : MvpPresenter<MapsView>(), RetrofitResponseListener {
     }
 
     fun updateMap() {
+        Variables.isShowNoInternet = true
         viewState.clearMap()
         places.clear()
 
         mFirebaseFirestore.collection(Constants.LOCATIONS)
             .addSnapshotListener { value, error ->
                 if (error != null) {
-                    Log.d(TAG, "Listen failed")
+                    logger.logd(TAG, "Listen failed")
                     return@addSnapshotListener
                 }
 
@@ -117,26 +120,20 @@ class MapsPresenter : MvpPresenter<MapsView>(), RetrofitResponseListener {
                                     )
                                 }
                             }
-                        DocumentChange.Type.MODIFIED -> Log.d(
-                            TAG, "Modified Msg: " +
-                                    "${dc.document.toObject(Message::class.java)}"
+                        DocumentChange.Type.MODIFIED -> logger.logd(
+                            TAG, "Modified Msg: " + "${dc.document}"
                         )
 
-                        DocumentChange.Type.REMOVED -> Log.d(
-                            TAG, "Removed Msg: " +
-                                    "${dc.document.toObject(Message::class.java)}"
+                        DocumentChange.Type.REMOVED -> logger.logd(
+                            TAG, "Removed Msg: " + "${dc.document}"
                         )
                     }
                 }
             }
     }
 
-    // Polyline callback from RetrofitModel
-    override fun putPolyline(polylineOptions: PolylineOptions) {
-        viewState.drawLine(polylineOptions)
-    }
-
     fun updateMapWithCalendarData(calendarMillis: Long) {
+        Variables.isShowNoInternet = true
         viewState.clearMap()
         places.clear()
         val channel = Channel<List<UserLocation>>()
@@ -187,5 +184,19 @@ class MapsPresenter : MvpPresenter<MapsView>(), RetrofitResponseListener {
                 }
             }
         }
+    }
+
+    override fun putResponse(response: Response<DirectionsResponses?>?) {
+        val shape = response?.body()?.getRoutes()?.get(0)
+            ?.getOverviewPolyline()?.getPoints()
+
+        viewState.drawLine(encodedPath = shape)
+    }
+
+    override fun putError(t: Throwable) {
+        if (Variables.isShowNoInternet) {
+            viewState.showNoInternetConnection()
+        }
+        Variables.isShowNoInternet = false
     }
 }

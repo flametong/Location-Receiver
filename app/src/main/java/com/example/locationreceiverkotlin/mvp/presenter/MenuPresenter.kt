@@ -18,8 +18,4 @@ class MenuPresenter(private val mAuth: FirebaseAuth) : MvpPresenter<MenuView>() 
         mAuth.signOut()
         viewState.signOutUser()
     }
-
-    fun requestLocationDialog() {
-        viewState.showRequestLocationDialog()
-    }
 }
